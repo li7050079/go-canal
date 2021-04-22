@@ -177,6 +177,8 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 go-canal 的 slav
 
 
 # 更新日志
+**更新计划**
+* 以修复使用bug为主
 
 **v1.0.0 bate （2021-04-16）**
 
