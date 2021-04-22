@@ -1,0 +1,294 @@
+# mysql配置
+addr: 192.168.200.116:3306
+user: canal
+pass: Route#123
+charset : utf8
+slave_id: 1001 #slave ID
+flavor: mysql #mysql or mariadb,默认mysql
+
+#系统相关配置
+#data_dir: D:\\transfer #应用产生的数据存放地址，包括日志、缓存数据等，默认当前运行目录下store文件夹
+logger:
+  level: info #日志级别；支持：debug|info|warn|error，默认info
+
+#maxprocs: 50 #并发协（线）程数量，默认为: CPU核数*2；一般情况下不需要设置此项
+bulk_size: 5000 #每批处理数量，不写默认100，可以根据带宽、机器性能等调整;如果是全量数据初始化时redis建议设为1000，其他接收端酌情调大
+
+#prometheus相关配置
+#enable_exporter: true #是否启用prometheus exporter，默认false
+#exporter_addr: 9595 #prometheus exporter端口，默认9595
+
+#web admin相关配置
+enable_web_admin: true #是否启用web admin，默认false
+web_admin_port: 8060 #web监控端口,默认8060
+
+  #cluster: # 集群相关配置
+  #name: myTransfer #集群名称，具有相同name的节点放入同一个集群
+  #bind_ip: 127.0.0.1 # 绑定的IP,如果机器有多张网卡(包含虚拟网卡)会有多个IP，使用这个属性绑定一个
+  #ZooKeeper地址，多个用逗号风格
+  #zk_addrs: 127.0.0.1:2181
+  #zk_authentication: 123456 #digest类型的访问秘钥，如：user:password，默认为空
+  #etcd_addrs: 127.0.0.1:2379 #etcd连接地址，多个用逗号分隔
+  #etcd_user: test #etcd用户名
+#etcd_password: 123456 #etcd密码
+
+#目标类型
+target: mongodb # 支持redis、mongodb、elasticsearch、rocketmq、kafka、rabbitmq
+
+#mongodb连接配置
+mongodb_addrs: 192.168.200.105:27017 #mongodb连接地址，多个用逗号分隔
+mongodb_username: root #mongodb用户名，默认为空
+mongodb_password: Root#123 #mongodb密码，默认为空
+#skip_no_pk_table: true
+
+#规则配置
+rule:
+  -
+    schema: route #数据库名称
+    table: base_area_country #表名称
+    order_by_column: area_name #排序字段，存量数据同步时不能为空
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: base_asn_update #表名称
+    order_by_column: asn #排序字段，存量数据同步时不能为空
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+    # -
+    # schema: route #数据库名称
+    # table: base_cn_as_rel_list #表名称
+    # order_by_column: asn1 #排序字段，存量数据同步时不能为空
+    # value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    # mongodb_database: route #mongodb database不能为空
+    # -
+    # schema: route #数据库名称
+    # table: base_cn_top_as #表名称
+    # order_by_column: asn #排序字段，存量数据同步时不能为空
+    # value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    # mongodb_database: route #mongodb database不能为空
+    # -
+    # schema: route #数据库名称
+    # table: base_global_as_rel_list #表名称
+    # order_by_column: asn1 #排序字段，存量数据同步时不能为空
+    # value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    # mongodb_database: route #mongodb database不能为空
+    # -
+    # schema: route #数据库名称
+    # table: base_global_top_as #表名称
+    # order_by_column: asn #排序字段，存量数据同步时不能为空
+    # value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    # mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: data_source #表名称
+    order_by_column: data_source #排序字段，存量数据同步时不能为空
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: tb_asn_owner #表名称
+    order_by_column: asn #排序字段，存量数据同步时不能为空
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+    # -
+    # schema: route #数据库名称
+    # table: rib_as_path_* #表名称
+    # order_by_column: path_key #排序字段，存量数据同步时不能为空
+    # value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    # mongodb_database: route #mongodb database不能为空
+    # mongodb_collection: testrib
+
+  -
+    schema: route #数据库名称
+    table: update_geo #表名称
+    order_by_column: asn #排序字段，存量数据同步时不能为空
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+
+  -
+    schema: route #数据库名称
+    table: update_leak #表名称
+    order_by_column: asn_p #排序字段，存量数据同步时不能为空
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: update_sibling #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: update_whitelist #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: bogons_ipv4 #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: irr_ipv4 #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: roa_ipv4 #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_ipv4* #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: irr_ipv6 #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: roa_ipv6 #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_as_path* #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: bogons_event #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: leak_event #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_asn_event #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_region_event #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_region_event_mail #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: exception_event #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: exception_event_final #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: exception_event_geo #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: exception_event_sibling #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: exception_event_updown #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: exception_event_whitelist #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: schedule #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: collect #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: crawl #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: lastest #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_lastest #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_asn_lastest #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_asn_detail_lastest #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_region_lastest #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: update_lastest #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: update_history #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_history #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_region_history #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_region_history #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_asn_history* #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: rib_asn_detail_history* #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空
+  -
+    schema: route #数据库名称
+    table: update_asn_history* #表名称
+    value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
+    mongodb_database: route #mongodb database不能为空

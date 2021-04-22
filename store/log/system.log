@@ -1,0 +1,34 @@
+[2021/04/13 11:30:16] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:30:40] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:30:50] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:51:01] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:51:09] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:54:00] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:54:20] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:54:27] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 11:55:37] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 12:10:00] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 13:45:54] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 127.0.0.1 3306 root   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
+[2021/04/13 13:45:54] [info] dump.go:204 skip dump, no mysqldump
+[2021/04/13 13:45:54] [info] binlogsyncer.go:360 begin to sync binlog from position (, 0)
+[2021/04/13 13:45:54] [info] sync.go:25 start sync binlog at binlog file (, 0)
+[2021/04/13 13:45:54] [info] binlogsyncer.go:777 rotate to (mysql-bin.000001, 4)
+[2021/04/13 13:45:54] [info] sync.go:68 received fake rotate event, next log name is mysql-bin.000001
+[2021/04/13 13:45:54] [info] sync.go:235 table structure changed, clear table cache: route.test_binlog
+2021-04-13 13:45:54	info	save position mysql-bin.000001 453
+[2021/04/13 13:45:54] [error] sync.go:145 parse query(RENAME USER `root`@`localhost` TO `root`@`%`) err line 1 column 11 near "USER `root`@`localhost` TO `root`@`%`" , will skip this event
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 1 ,field: , value: {"id":1,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 2 ,field: , value: {"id":2,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 3 ,field: , value: {"id":3,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 4 ,field: , value: {"id":4,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 5 ,field: , value: {"id":5,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 6 ,field: , value: {"id":6,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 7 ,field: , value: {"id":7,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 8 ,field: , value: {"id":8,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 9 ,field: , value: {"id":9,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 10 ,field: , value: {"id":10,"name":"123"}
+2021-04-13 13:45:54	info	action: insert, structure: String ,key: 11 ,field: , value: {"id":11,"name":"123"}
+2021-04-13 13:45:54	info	action: update, structure: String ,key: 11 ,field: , value: {"id":11,"name":"123rr"}
+2021-04-13 13:45:54	info	action: delete, structure: String ,key: 11 ,field: , value: <nil>
+2021-04-13 13:45:54	info	处理完成 13 条数据
+[2021/04/13 15:59:50] [info] binlogsyncer.go:144 create BinlogSyncer with config {1001 mysql 192.168.200.116 3306 canal   utf8 false false <nil> false UTC false 0 0s 0s 0 false false 0}
