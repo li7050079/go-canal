@@ -35,12 +35,17 @@ web_admin_port: 8060 #web监控端口,默认8060
     #etcd_password: 123456 #etcd密码
 
 #目标类型
-target: mongodb # 支持redis、mongodb、elasticsearch、rocketmq、kafka、rabbitmq
+target: mysql # 支持redis、mongodb、elasticsearch、rocketmq、kafka、rabbitmq
 
 #mongodb连接配置
-mongodb_addrs: 192.168.200.105:27017 #mongodb连接地址，多个用逗号分隔
-mongodb_username: root #mongodb用户名，默认为空
-mongodb_password: Root#123 #mongodb密码，默认为空
+#mongodb_addrs: 192.168.200.105:27017 #mongodb连接地址，多个用逗号分隔
+#mongodb_username: root #mongodb用户名，默认为空
+#mongodb_password: Root#123 #mongodb密码，默认为空
+mysql_addr: 192.168.110.207:3306
+mysql_username: root
+mysql_password: ty2020
+mysql_database: testbin
+
 
 #cache:
 #  -
@@ -50,13 +55,13 @@ mongodb_password: Root#123 #mongodb密码，默认为空
 #规则配置
 rule:
   -
-    schema: route #数据库名称
+    schema: testbin #数据库名称
     table: test_binlog1 #表名称
     #order_by_column: area_name #排序字段，存量数据同步时不能为空
 #    add_column: test={route:test_binlog}.{name:mmm}
     value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
     #mongodb相关
-    mongodb_database: route #mongodb database不能为空
+#    mongodb_database: route #mongodb database不能为空
 
 #  -
 #    schema: route

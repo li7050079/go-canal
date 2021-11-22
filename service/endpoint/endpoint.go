@@ -87,6 +87,9 @@ func NewEndpoint(ds *canal.Canal) Endpoint {
 	if cfg.IsScript() {
 		return newScriptEndpoint()
 	}
+	if cfg.IsMysql() {
+		return newMysqlEndpoint()
+	}
 
 	return nil
 }

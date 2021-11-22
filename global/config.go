@@ -42,6 +42,7 @@ const (
 	_targetKafka         = "KAFKA"
 	_targetElasticsearch = "ELASTICSEARCH"
 	_targetScript        = "SCRIPT"
+	_targetMysql         = "MYSQL"
 
 	RedisGroupTypeSentinel = "sentinel"
 	RedisGroupTypeCluster  = "cluster"
@@ -130,6 +131,12 @@ type Config struct {
 	ElsPassword string `yaml:"es_password"` //Elasticsearch密码
 	ElsVersion  int    `yaml:"es_version"`  //Elasticsearch版本，支持6和7、默认为7
 
+	// ------------------- mysql -----------------
+	MysqlAddr     string `yaml:"mysql_addr"`     //Mysql连接地址，多个用逗号分隔
+	MysqlUsername string `yaml:"mysql_username"` //Mysql用户名
+	MysqlPassword string `yaml:"mysql_password"` //Mysql密码
+	MysqlDatabase string `yaml:"mysql_database"` //Mysql数据库名
+
 	isReserveRawData bool //保留原始数据
 	isMQ             bool //是否消息队列
 }
@@ -191,6 +198,10 @@ func initConfig(fileName string) error {
 		}
 	case _targetScript:
 
+	case _targetMysql:
+		if err := checkMysqlConfig(&c); err != nil {
+			return errors.Trace(err)
+		}
 	default:
 		return errors.Errorf("unsupported target: %s", c.Target)
 	}
@@ -396,6 +407,13 @@ func checkElsConfig(c *Config) error {
 	return nil
 }
 
+func checkMysqlConfig(c *Config) error {
+	if len(c.MysqlAddr) == 0 {
+		errors.Errorf("empty mysql_addr not allowed")
+	}
+	return nil
+}
+
 func (c *Config) IsCluster() bool {
 	if !c.IsZk() && !c.IsEtcd() {
 		return false
@@ -449,7 +467,9 @@ func (c *Config) IsKafka() bool {
 func (c *Config) IsEls() bool {
 	return strings.ToUpper(c.Target) == _targetElasticsearch
 }
-
+func (c *Config) IsMysql() bool {
+	return strings.ToUpper(c.Target) == _targetMysql
+}
 func (c *Config) IsScript() bool {
 	return strings.ToUpper(c.Target) == _targetScript
 }
@@ -495,6 +515,10 @@ func (c *Config) Destination() string {
 		des += ")"
 	case _targetScript:
 		des += "Lua Script"
+	case _targetMysql:
+		des += "mysql("
+		des += c.MysqlAddr
+		des += ")"
 	}
 	return des
 }
@@ -513,6 +537,8 @@ func (c *Config) DestStdName() string {
 		return "Kafka"
 	case _targetElasticsearch:
 		return "Elasticsearch"
+	case _targetMysql:
+		return "Mysql"
 	}
 
 	return ""
@@ -532,6 +558,8 @@ func (c *Config) DestAddr() string {
 		return c.KafkaAddr
 	case _targetElasticsearch:
 		return c.ElsAddr
+	case _targetMysql:
+		return c.MysqlAddr
 	}
 
 	return ""

@@ -14,6 +14,7 @@ type RowRequest struct {
 	Timestamp uint32
 	Old       []interface{}
 	Row       []interface{}
+	//Query     []byte
 }
 
 type PosRequest struct {

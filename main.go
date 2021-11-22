@@ -59,7 +59,7 @@ func main() {
 
 	//stockFlag = true
 
-	//cfgPath = "D:\\transfer\\app-proc.yml"
+	cfgPath = "D:\\WorkSpace\\idea\\go-canal\\app.yml"
 
 	//cfgPath = "D:\\transfer\\release_test_luascript.yml"
 

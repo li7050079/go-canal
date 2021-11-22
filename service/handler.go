@@ -65,12 +65,15 @@ func (s *handler) OnTableChanged(schema, table string) error {
 	return nil
 }
 
-func (s *handler) OnDDL(nextPos mysql.Position, _ *replication.QueryEvent) error {
-	s.queue <- model.PosRequest{
-		Name:  nextPos.Name,
-		Pos:   nextPos.Pos,
-		Force: true,
-	}
+func (s *handler) OnDDL(nextPos mysql.Position, replication *replication.QueryEvent) error {
+
+	var requests []*model.RowRequest
+	v := new(model.RowRequest)
+	v.Action = "DDL"
+	//v.Query = replication.Query
+
+	s.queue <- requests
+	println(string(replication.Query))
 	return nil
 }
 
