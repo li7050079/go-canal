@@ -30,10 +30,10 @@ import (
 	"github.com/yuin/gopher-lua"
 	"github.com/yuin/gopher-lua/parse"
 
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/util/dates"
-	"go-mysql-transfer/util/files"
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/model"
+	"go-canel/util/dates"
+	"go-canel/util/files"
+	"go-canel/util/stringutil"
 )
 
 const (

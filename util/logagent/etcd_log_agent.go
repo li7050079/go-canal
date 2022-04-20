@@ -18,7 +18,7 @@
 package logagent
 
 import (
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/logs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

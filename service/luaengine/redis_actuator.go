@@ -21,9 +21,9 @@ import (
 	"github.com/siddontang/go-mysql/canal"
 	"github.com/yuin/gopher-lua"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/global"
+	"go-canel/model"
+	"go-canel/util/stringutil"
 )
 
 const _globalOLDROW = "___OLDROW___"

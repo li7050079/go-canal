@@ -20,8 +20,8 @@ package luaengine
 import (
 	"github.com/yuin/gopher-lua"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/model"
+	"go-canel/global"
+	"go-canel/model"
 )
 
 func mqModule(L *lua.LState) int {

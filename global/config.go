@@ -28,10 +28,10 @@ import (
 	"github.com/juju/errors"
 	"gopkg.in/yaml.v2"
 
-	"go-mysql-transfer/util/files"
-	"go-mysql-transfer/util/logs"
-	"go-mysql-transfer/util/nets"
-	"go-mysql-transfer/util/sys"
+	"go-canel/util/files"
+	"go-canel/util/logs"
+	"go-canel/util/nets"
+	"go-canel/util/sys"
 )
 
 const (

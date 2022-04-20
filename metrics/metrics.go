@@ -27,7 +27,7 @@ import (
 	"github.com/siddontang/go-mysql/canal"
 	"go.uber.org/atomic"
 
-	"go-mysql-transfer/global"
+	"go-canel/global"
 )
 
 const (

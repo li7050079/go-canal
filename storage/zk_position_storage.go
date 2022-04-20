@@ -22,8 +22,8 @@ import (
 
 	"github.com/siddontang/go-mysql/mysql"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/util/zookeepers"
+	"go-canel/global"
+	"go-canel/util/zookeepers"
 )
 
 type zkPositionStorage struct {

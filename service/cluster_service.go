@@ -20,8 +20,8 @@ package service
 import (
 	"log"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/metrics"
+	"go-canel/global"
+	"go-canel/metrics"
 )
 
 type ClusterService struct {

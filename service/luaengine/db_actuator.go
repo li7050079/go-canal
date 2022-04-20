@@ -21,7 +21,7 @@ import (
 	"github.com/layeh/gopher-json"
 	"github.com/yuin/gopher-lua"
 
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/logs"
 )
 
 func dbModule(L *lua.LState) int {

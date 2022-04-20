@@ -28,7 +28,7 @@ import (
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 
-	"go-mysql-transfer/util/files"
+	"go-canel/util/files"
 )
 
 func NewZapLogger(config *Config, options ...zap.Option) (*zap.Logger, io.Writer, error) {

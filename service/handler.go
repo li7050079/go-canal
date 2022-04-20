@@ -18,8 +18,8 @@
 package service
 
 import (
-	"go-mysql-transfer/metrics"
-	"go-mysql-transfer/storage"
+	"go-canel/metrics"
+	"go-canel/storage"
 	"log"
 	"time"
 
@@ -28,9 +28,9 @@ import (
 	"github.com/siddontang/go-mysql/mysql"
 	"github.com/siddontang/go-mysql/replication"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/util/logs"
+	"go-canel/global"
+	"go-canel/model"
+	"go-canel/util/logs"
 )
 
 type handler struct {

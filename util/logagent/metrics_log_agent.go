@@ -17,7 +17,7 @@
  */
 package logagent
 
-import "go-mysql-transfer/util/logs"
+import "go-canel/util/logs"
 
 type MetricsLoggerAgent struct {
 }

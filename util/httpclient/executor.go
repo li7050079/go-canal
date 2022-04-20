@@ -14,7 +14,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/util/stringutil"
 )
 
 const (

@@ -22,8 +22,8 @@ import (
 
 	"github.com/siddontang/go-mysql/mysql"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/util/etcds"
+	"go-canel/global"
+	"go-canel/util/etcds"
 )
 
 type etcdPositionStorage struct {

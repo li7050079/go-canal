@@ -29,11 +29,11 @@ import (
 	"go.etcd.io/etcd/clientv3"
 	etcdlog "go.etcd.io/etcd/pkg/logutil"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/util/byteutil"
-	"go-mysql-transfer/util/files"
-	"go-mysql-transfer/util/logagent"
-	"go-mysql-transfer/util/zookeepers"
+	"go-canel/global"
+	"go-canel/util/byteutil"
+	"go-canel/util/files"
+	"go-canel/util/logagent"
+	"go-canel/util/zookeepers"
 )
 
 const (

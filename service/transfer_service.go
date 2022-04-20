@@ -29,11 +29,11 @@ import (
 	"github.com/siddontang/go-mysql/mysql"
 	"go.uber.org/atomic"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/metrics"
-	"go-mysql-transfer/service/endpoint"
-	"go-mysql-transfer/storage"
-	"go-mysql-transfer/util/logs"
+	"go-canel/global"
+	"go-canel/metrics"
+	"go-canel/service/endpoint"
+	"go-canel/storage"
+	"go-canel/util/logs"
 )
 
 const _transferLoopInterval = 1

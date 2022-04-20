@@ -27,11 +27,11 @@ import (
 	"strings"
 	"sync"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/service/endpoint"
-	"go-mysql-transfer/util/dates"
-	"go-mysql-transfer/util/logs"
+	"go-canel/global"
+	"go-canel/model"
+	"go-canel/service/endpoint"
+	"go-canel/util/dates"
+	"go-canel/util/logs"
 )
 
 // 存量数据

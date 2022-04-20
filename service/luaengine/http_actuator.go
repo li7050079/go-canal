@@ -20,7 +20,7 @@ package luaengine
 import (
 	"github.com/yuin/gopher-lua"
 
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/logs"
 )
 
 func httpModule(L *lua.LState) int {

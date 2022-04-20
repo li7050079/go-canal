@@ -17,7 +17,7 @@
  */
 package storage
 
-import "go-mysql-transfer/global"
+import "go-canel/global"
 
 type ElectionStorage interface {
 	Elect() error

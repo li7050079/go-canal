@@ -2,9 +2,9 @@ package web
 
 import (
 	"fmt"
-	"go-mysql-transfer/service"
-	"go-mysql-transfer/util/dates"
-	"go-mysql-transfer/util/nets"
+	"go-canel/service"
+	"go-canel/util/dates"
+	"go-canel/util/nets"
 	"log"
 	"net/http"
 	"path"
@@ -13,9 +13,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/metrics"
-	"go-mysql-transfer/util/logs"
+	"go-canel/global"
+	"go-canel/metrics"
+	"go-canel/util/logs"
 )
 
 var _server *http.Server

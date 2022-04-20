@@ -9,7 +9,7 @@ import (
 	"time"
 
 	sidlog "github.com/siddontang/go-log/log"
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/logs"
 )
 
 var (

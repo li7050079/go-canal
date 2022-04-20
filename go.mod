@@ -1,4 +1,4 @@
-module go-mysql-transfer
+module go-canel
 
 go 1.14
 
@@ -9,10 +9,10 @@ require (
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/gin-gonic/gin v1.6.3
-	github.com/go-mysql-org/go-mysql v1.2.0 // indirect
 	github.com/go-redis/redis v6.15.8+incompatible
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/websocket v1.4.0 // indirect
+	github.com/jmoiron/sqlx v1.3.3 // indirect
 	github.com/json-iterator/go v1.1.9
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/juju/testing v0.0.0-20200706033705-4c23f9c453cd // indirect
@@ -22,6 +22,8 @@ require (
 	github.com/onsi/ginkgo v1.14.0 // indirect
 	github.com/pingcap/check v0.0.0-20191107115940-caf2b9e6ccf4 // indirect
 	github.com/pingcap/errors v0.11.5-0.20201126102027-b0a155152ca3
+	github.com/pingcap/log v0.0.0-20210317133921-96f4fcab92a4 // indirect
+	github.com/pingcap/parser v0.0.0-20210415081931-48e7f467fd74 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.0.0
 	github.com/samuel/go-zookeeper v0.0.0-20200724154423-2164a8ac840e
@@ -33,11 +35,14 @@ require (
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/yuin/gopher-lua v0.0.0-20200603152657-dc2b0ca8b37e
 	go.etcd.io/bbolt v1.3.3
-	go.etcd.io/etcd v0.5.0-alpha.5.0.20191023171146-3cf2f69b5738 // indirect
-	go.mongodb.org/mongo-driver v1.4.0 // indirect
+	go.etcd.io/etcd v0.5.0-alpha.5.0.20191023171146-3cf2f69b5738
+	go.mongodb.org/mongo-driver v1.4.0
 	go.uber.org/atomic v1.7.0
+	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.16.0
+	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
+	golang.org/x/tools v0.0.0-20201125231158-b5590deeca9b // indirect
 	google.golang.org/genproto v0.0.0-20190905072037-92dd089d5514 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.3.0

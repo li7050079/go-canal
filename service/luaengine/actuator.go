@@ -26,9 +26,9 @@ import (
 	"github.com/siddontang/go-mysql/canal"
 	"github.com/yuin/gopher-lua"
 
-	"go-mysql-transfer/util/byteutil"
-	"go-mysql-transfer/util/httpclient"
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/util/byteutil"
+	"go-canel/util/httpclient"
+	"go-canel/util/stringutil"
 )
 
 const (

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/service/mysqlopt"
+	"go-canel/global"
+	"go-canel/service/mysqlopt"
 	"go.etcd.io/bbolt"
 )
 

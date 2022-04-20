@@ -18,7 +18,7 @@
 package election
 
 import (
-	"go-mysql-transfer/global"
+	"go-canel/global"
 )
 
 type Service interface {

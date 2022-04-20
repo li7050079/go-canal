@@ -5,7 +5,7 @@ import (
 
 	"github.com/samuel/go-zookeeper/zk"
 
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/util/stringutil"
 )
 
 func CreateDirIfNecessary(dir string, conn *zk.Conn) error {

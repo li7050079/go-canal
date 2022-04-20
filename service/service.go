@@ -18,8 +18,8 @@
 package service
 
 import (
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/service/election"
+	"go-canel/global"
+	"go-canel/service/election"
 )
 
 var (

@@ -29,12 +29,12 @@ import (
 	"github.com/juju/errors"
 	"github.com/siddontang/go-mysql/mysql"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/metrics"
-	"go-mysql-transfer/service"
-	"go-mysql-transfer/storage"
-	"go-mysql-transfer/util/stringutil"
-	"go-mysql-transfer/web"
+	"go-canel/global"
+	"go-canel/metrics"
+	"go-canel/service"
+	"go-canel/storage"
+	"go-canel/util/stringutil"
+	"go-canel/web"
 )
 
 var (

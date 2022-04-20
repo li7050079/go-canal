@@ -1,7 +1,7 @@
 package tcp
 
 import (
-	"go-mysql-transfer/service/cache"
+	"go-canel/service/cache"
 	"log"
 	"net"
 )

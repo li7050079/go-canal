@@ -20,7 +20,7 @@ package storage
 import (
 	"github.com/siddontang/go-mysql/mysql"
 
-	"go-mysql-transfer/global"
+	"go-canel/global"
 )
 
 type PositionStorage interface {

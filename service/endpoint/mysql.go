@@ -23,10 +23,10 @@ import (
 	"github.com/siddontang/go-mysql/client"
 	"github.com/siddontang/go-mysql/mysql"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/service/luaengine"
-	"go-mysql-transfer/util/logs"
+	"go-canel/global"
+	"go-canel/model"
+	"go-canel/service/luaengine"
+	"go-canel/util/logs"
 )
 
 type MysqlEndpoint struct {

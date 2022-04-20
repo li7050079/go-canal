@@ -3,7 +3,7 @@ package luaengine
 import (
 	lua "github.com/yuin/gopher-lua"
 
-	"go-mysql-transfer/global"
+	"go-canel/global"
 )
 
 func scriptModule(L *lua.LState) int {

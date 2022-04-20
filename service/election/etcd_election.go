@@ -28,10 +28,10 @@ import (
 	"go.etcd.io/etcd/clientv3/concurrency"
 	"go.uber.org/atomic"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/storage"
-	"go-mysql-transfer/util/etcds"
-	"go-mysql-transfer/util/logs"
+	"go-canel/global"
+	"go-canel/storage"
+	"go-canel/util/etcds"
+	"go-canel/util/logs"
 )
 
 const _electionNodeTTL = 2 //秒

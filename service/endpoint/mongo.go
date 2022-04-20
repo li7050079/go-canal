@@ -31,12 +31,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/metrics"
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/service/luaengine"
-	"go-mysql-transfer/util/logs"
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/global"
+	"go-canel/metrics"
+	"go-canel/model"
+	"go-canel/service/luaengine"
+	"go-canel/util/logs"
+	"go-canel/util/stringutil"
 )
 
 type cKey struct {

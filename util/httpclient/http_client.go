@@ -24,7 +24,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/logs"
 )
 
 var DefaultClient = NewClient()

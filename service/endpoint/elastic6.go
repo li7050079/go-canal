@@ -28,13 +28,13 @@ import (
 	"github.com/siddontang/go-mysql/canal"
 	"github.com/siddontang/go-mysql/mysql"
 
-	"go-mysql-transfer/global"
-	"go-mysql-transfer/metrics"
-	"go-mysql-transfer/model"
-	"go-mysql-transfer/service/luaengine"
-	"go-mysql-transfer/util/logagent"
-	"go-mysql-transfer/util/logs"
-	"go-mysql-transfer/util/stringutil"
+	"go-canel/global"
+	"go-canel/metrics"
+	"go-canel/model"
+	"go-canel/service/luaengine"
+	"go-canel/util/logagent"
+	"go-canel/util/logs"
+	"go-canel/util/stringutil"
 )
 
 type Elastic6Endpoint struct {

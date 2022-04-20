@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"go.uber.org/zap/zapcore"
 
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/logs"
 )
 
 type RocketmqLoggerAgent struct {

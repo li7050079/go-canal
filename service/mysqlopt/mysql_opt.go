@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/siddontang/go-mysql/canal"
 	lua "github.com/yuin/gopher-lua"
-	"go-mysql-transfer/util/httpclient"
-	"go-mysql-transfer/util/logs"
+	"go-canel/util/httpclient"
+	"go-canel/util/logs"
 	"strconv"
 	"sync"
 )
