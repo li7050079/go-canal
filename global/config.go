@@ -44,6 +44,8 @@ const (
 	_targetScript        = "SCRIPT"
 	_targetMysql         = "MYSQL"
 
+	_targetClickhouse = "CLICKHOUSE"
+
 	RedisGroupTypeSentinel = "sentinel"
 	RedisGroupTypeCluster  = "cluster"
 
@@ -138,10 +140,10 @@ type Config struct {
 	MysqlDatabase string `yaml:"mysql_database"` //Mysql数据库名
 
 	// ------------------- clickhouse -----------------
-	ClickhouseAddr     string `yaml:"mysql_addr"`     //Mysql连接地址，多个用逗号分隔
-	ClickhouseUsername string `yaml:"mysql_username"` //Mysql用户名
-	ClickhousePassword string `yaml:"mysql_password"` //Mysql密码
-	ClickhouseDatabase string `yaml:"mysql_database"` //Mysql数据库名
+	ClickhouseAddr     string `yaml:"clickhouse_addr"`     //Clickhouse连接地址，多个用逗号分隔
+	ClickhouseUsername string `yaml:"clickhouse_username"` //Clickhouse用户名
+	ClickhousePassword string `yaml:"clickhouse_password"` //Clickhouse密码
+	ClickhouseDatabase string `yaml:"clickhouse_database"` //Clickhouse数据库名
 
 	isReserveRawData bool //保留原始数据
 	isMQ             bool //是否消息队列
@@ -475,6 +477,9 @@ func (c *Config) IsEls() bool {
 }
 func (c *Config) IsMysql() bool {
 	return strings.ToUpper(c.Target) == _targetMysql
+}
+func (c *Config) IsClickhouse() bool {
+	return strings.ToUpper(c.Target) == _targetClickhouse
 }
 func (c *Config) IsScript() bool {
 	return strings.ToUpper(c.Target) == _targetScript

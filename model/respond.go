@@ -20,6 +20,12 @@ var mongoRespondPool = sync.Pool{
 	},
 }
 
+var rdbmsRespondPool = sync.Pool{
+	New: func() interface{} {
+		return new(RdbmsRespond)
+	},
+}
+
 var redisRespondPool = sync.Pool{
 	New: func() interface{} {
 		return new(RedisRespond)
@@ -48,6 +54,15 @@ type MongoRespond struct {
 	Action     string
 	Id         interface{}
 	Table      map[string]interface{}
+}
+
+type RdbmsRespond struct {
+	RuleKey   string
+	Schema    string
+	TableName string
+	Action    string
+	Id        interface{}
+	Table     map[string]interface{}
 }
 
 type RedisRespond struct {
@@ -90,4 +105,12 @@ func BuildRedisRespond() *RedisRespond {
 
 func ReleaseRedisRespond(t *RedisRespond) {
 	redisRespondPool.Put(t)
+}
+
+func BuildRdbmsRespond() *RdbmsRespond {
+	return rdbmsRespondPool.Get().(*RdbmsRespond)
+}
+
+func ReleaseRdbmsRespond(t *RdbmsRespond) {
+	rdbmsRespondPool.Put(t)
 }

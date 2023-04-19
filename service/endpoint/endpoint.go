@@ -342,11 +342,17 @@ func primaryKey(re *model.RowRequest, rule *global.Rule) interface{} {
 			key += stringutil.ToString(re.Row[index])
 		}
 		return key
-	} else {
+	} else if len(rule.TableInfo.PKColumns) > 0 {
 		index := rule.TableInfo.PKColumns[0]
 		data := re.Row[index]
 		column := rule.TableInfo.Columns[index]
 		return convertColumnData(data, &column, rule)
+	} else {
+		var key string
+		for index, _ := range rule.TableInfo.Columns {
+			key += stringutil.ToString(re.Row[index])
+		}
+		return key
 	}
 }
 

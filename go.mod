@@ -4,7 +4,7 @@ go 1.14
 
 require (
 	github.com/Shopify/sarama v1.27.0
-	github.com/alexbrainman/odbc v0.0.0-20211220213544-9c9a2e61c5e2
+	github.com/alexbrainman/odbc v0.0.0-20211220213544-9c9a2e61c5e2 // indirect
 	github.com/apache/rocketmq-client-go/v2 v2.0.0
 	github.com/bkaradzic/go-lz4 v1.0.0 // indirect
 	github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58 // indirect
@@ -14,16 +14,16 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	//github.com/go-mysql-org/go-mysql v1.5.0 // indirect
 	github.com/go-redis/redis v6.15.8+incompatible
-	github.com/go-sql-driver/mysql v1.6.0
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gorilla/websocket v1.4.0 // indirect
 	github.com/jmoiron/sqlx v1.3.5
-	github.com/joho/godotenv v1.3.0
+	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/json-iterator/go v1.1.9
 	github.com/juju/errors v0.0.0-20200330140219-3fe23663418f
 	github.com/juju/testing v0.0.0-20200706033705-4c23f9c453cd // indirect
 	github.com/kshvakov/clickhouse v1.3.6
 	github.com/layeh/gopher-json v0.0.0-20190114024228-97fed8db8427
-	github.com/lib/pq v1.2.0
+	github.com/lib/pq v1.2.0 // indirect
 	github.com/olivere/elastic v6.2.34+incompatible
 	github.com/olivere/elastic/v7 v7.0.19
 	github.com/onsi/ginkgo v1.14.0 // indirect
@@ -34,6 +34,7 @@ require (
 	github.com/prometheus/client_golang v1.0.0
 	github.com/samuel/go-zookeeper v0.0.0-20200724154423-2164a8ac840e
 	github.com/satori/go.uuid v1.2.0
+	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726
 	github.com/siddontang/go-log v0.0.0-20180807004314-8d05993dda07
 	github.com/siddontang/go-mysql v1.1.0
 	github.com/spf13/pflag v1.0.3 // indirect
@@ -51,7 +52,6 @@ require (
 	google.golang.org/genproto v0.0.0-20190905072037-92dd089d5514 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.3.0
-	github.com/jmoiron/sqlx v1.2.0
 )
 
 //replace github.com/siddontang/go-mysql v1.1.0 => github.com/go-mysql-org/go-mysql v1.5.0
