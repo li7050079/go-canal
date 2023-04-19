@@ -137,6 +137,12 @@ type Config struct {
 	MysqlPassword string `yaml:"mysql_password"` //Mysql密码
 	MysqlDatabase string `yaml:"mysql_database"` //Mysql数据库名
 
+	// ------------------- clickhouse -----------------
+	ClickhouseAddr     string `yaml:"mysql_addr"`     //Mysql连接地址，多个用逗号分隔
+	ClickhouseUsername string `yaml:"mysql_username"` //Mysql用户名
+	ClickhousePassword string `yaml:"mysql_password"` //Mysql密码
+	ClickhouseDatabase string `yaml:"mysql_database"` //Mysql数据库名
+
 	isReserveRawData bool //保留原始数据
 	isMQ             bool //是否消息队列
 }
