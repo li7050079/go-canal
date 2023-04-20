@@ -336,24 +336,19 @@ func oldRowMap(req *model.RowRequest, rule *global.Rule, primitive bool) map[str
 }
 
 func primaryKey(re *model.RowRequest, rule *global.Rule) interface{} {
-	if rule.IsCompositeKey { // 组合ID
-		var key string
+	if rule.IsCompositeKey {
+		vList := make([]string, 0)
 		for _, index := range rule.TableInfo.PKColumns {
-			key += stringutil.ToString(re.Row[index])
+			vList = append(vList, stringutil.ToString(re.Row[index]))
 		}
-		return key
-	} else if len(rule.TableInfo.PKColumns) > 0 {
-		index := rule.TableInfo.PKColumns[0]
-		data := re.Row[index]
-		column := rule.TableInfo.Columns[index]
-		return convertColumnData(data, &column, rule)
-	} else {
-		var key string
-		for index, _ := range rule.TableInfo.Columns {
-			key += stringutil.ToString(re.Row[index])
-		}
-		return key
+		return strings.Join(vList, "_")
 	}
+
+	index := rule.TableInfo.PKColumns[0]
+	data := re.Row[index]
+	column := rule.TableInfo.Columns[index]
+
+	return convertColumnData(data, &column, rule)
 }
 
 func elsHosts(addr string) []string {

@@ -19,6 +19,13 @@ package endpoint
 
 import (
 	"context"
+	"go-canel/global"
+	"go-canel/metrics"
+	"go-canel/model"
+	"go-canel/service/luaengine"
+	"go-canel/util/logagent"
+	"go-canel/util/logs"
+	"go-canel/util/stringutil"
 	"log"
 	"strings"
 	"sync"
@@ -27,14 +34,6 @@ import (
 	"github.com/olivere/elastic"
 	"github.com/siddontang/go-mysql/canal"
 	"github.com/siddontang/go-mysql/mysql"
-
-	"go-canel/global"
-	"go-canel/metrics"
-	"go-canel/model"
-	"go-canel/service/luaengine"
-	"go-canel/util/logagent"
-	"go-canel/util/logs"
-	"go-canel/util/stringutil"
 )
 
 type Elastic6Endpoint struct {
@@ -57,7 +56,7 @@ func (s *Elastic6Endpoint) Connect() error {
 	options = append(options, elastic.SetErrorLog(logagent.NewElsLoggerAgent()))
 	options = append(options, elastic.SetURL(s.hosts...))
 	if global.Cfg().ElsUser != "" && global.Cfg().ElsPassword != "" {
-		options = append(options, elastic.SetBasicAuth(global.Cfg().ElsUser, global.Cfg().Password))
+		options = append(options, elastic.SetBasicAuth(global.Cfg().ElsUser, global.Cfg().ElsPassword))
 	}
 
 	client, err := elastic.NewClient(options...)
@@ -122,21 +121,26 @@ func (s *Elastic6Endpoint) updateIndexMapping(rule *global.Rule) error {
 	if err != nil {
 		return err
 	}
+
+	if ret[rule.ElsIndex] == nil {
+		return nil
+	}
 	retIndex := ret[rule.ElsIndex].(map[string]interface{})
+
+	if retIndex["mappings"] == nil {
+		return nil
+	}
 	retMaps := retIndex["mappings"].(map[string]interface{})
-	if retMaps == nil {
+
+	if retMaps["_doc"] == nil {
 		return nil
 	}
-
 	retDoc := retMaps["_doc"].(map[string]interface{})
-	if retMaps == nil {
-		return nil
-	}
 
-	retPros := retDoc["properties"].(map[string]interface{})
-	if retPros == nil {
+	if retDoc["properties"] == nil {
 		return nil
 	}
+	retPros := retDoc["properties"].(map[string]interface{})
 
 	var currents map[string]interface{}
 	if rule.LuaEnable() {
