@@ -122,84 +122,8 @@ func (s *MysqlEndpoint) Consume(from mysql.Position, rows []*model.RowRequest) e
 }
 
 func (s *MysqlEndpoint) Stock(rows []*model.RowRequest) int64 {
-	//expect := true
-	//models := make(map[cKey][]mongo.WriteModel, 0)
-	//for _, row := range rows {
-	//	rule, _ := global.RuleIns(row.RuleKey)
-	//	if rule.TableColumnSize != len(row.Row) {
-	//		logs.Warnf("%s schema mismatching", row.RuleKey)
-	//		continue
-	//	}
-	//
-	//	if rule.LuaEnable() {
-	//		kvm := rowMap(row, rule, true)
-	//		ls, err := luaengine.DoMongoOps(kvm, row.Action, rule)
-	//		if err != nil {
-	//			log.Println("Lua 脚本执行失败!!! ,详情请参见日志")
-	//			logs.Errorf("lua 脚本执行失败 : %s ", errors.ErrorStack(err))
-	//			expect = false
-	//			break
-	//		}
-	//
-	//		for _, resp := range ls {
-	//			ccKey := s.collectionKey(rule.MongodbDatabase, resp.Collection)
-	//			model := mongo.NewInsertOneModel().SetDocument(resp.Table)
-	//			array, ok := models[ccKey]
-	//			if !ok {
-	//				array = make([]mongo.WriteModel, 0)
-	//			}
-	//			array = append(array, model)
-	//			models[ccKey] = array
-	//		}
-	//	} else {
-	//		kvm := rowMap(row, rule, false)
-	//		id := primaryKey(row, rule)
-	//		kvm["_id"] = id
-	//
-	//		ccKey := s.collectionKey(rule.MongodbDatabase, rule.MongodbCollection)
-	//		model := mongo.NewInsertOneModel().SetDocument(kvm)
-	//		array, ok := models[ccKey]
-	//		if !ok {
-	//			array = make([]mongo.WriteModel, 0)
-	//		}
-	//		array = append(array, model)
-	//		models[ccKey] = array
-	//	}
-	//}
-	//
-	//if !expect {
-	//	return 0
-	//}
-	//
-	//var slowly bool
-	var sum int64
-	//for key, vs := range models {
-	//	collection := s.collection(key)
-	//	rr, err := collection.BulkWrite(context.Background(), vs)
-	//	if err != nil {
-	//		if s.isDuplicateKeyError(err.Error()) {
-	//			slowly = true
-	//		}
-	//		logs.Error(errors.ErrorStack(err))
-	//		break
-	//	}
-	//	sum += rr.InsertedCount
-	//}
-	//
-	//if slowly {
-	//	logs.Info("do consume slowly ... ... ")
-	//	slowlySum, err := s.doConsumeSlowly(rows)
-	//	if err != nil {
-	//		logs.Warnf(err.Error())
-	//	}
-	//	return slowlySum
-	//}
-
-	return sum
-}
-
-func (s *MysqlEndpoint) doConsumeSlowly(rows []*model.RowRequest) (int64, error) {
-	var sum int64
+	expect := true
+	rdbmsOpt := rdbmsopt.NewRdbmsOpt()
 	for _, row := range rows {
 		rule, _ := global.RuleIns(row.RuleKey)
 		if rule.TableColumnSize != len(row.Row) {
@@ -209,71 +133,38 @@ func (s *MysqlEndpoint) doConsumeSlowly(rows []*model.RowRequest) (int64, error)
 
 		if rule.LuaEnable() {
 			kvm := rowMap(row, rule, true)
-			ls, err := luaengine.DoMongoOps(kvm, row.Action, rule)
+			ls, err := luaengine.DoRdbmsOps(kvm, row.Action, rule)
 			if err != nil {
+				log.Errorf("Lua 脚本执行失败!!! ,详情请参见日志")
 				logs.Errorf("lua 脚本执行失败 : %s ", errors.ErrorStack(err))
-				return sum, err
+				expect = false
+				break
 			}
+
 			for _, resp := range ls {
-				//collection := s.collection(s.collectionKey(rule.MongodbDatabase, resp.Collection))
-				switch resp.Action {
-				case canal.InsertAction:
-					//_, err := collection.InsertOne(context.Background(), resp.Table)
-					if err != nil {
-						//if s.isDuplicateKeyError(err.Error()) {
-						//	logs.Warnf("duplicate key [ %v ]", stringutil.ToJsonString(resp.Table))
-						//} else {
-						//	return sum, err
-						//}
-					}
-				case canal.UpdateAction:
-					//_, err := collection.UpdateOne(context.Background(), bson.M{"_id": resp.Id}, bson.M{"$set": resp.Table})
-					//if err != nil {
-					//	return sum, err
-					//}
-				case canal.DeleteAction:
-					//_, err := collection.DeleteOne(context.Background(), bson.M{"_id": resp.Id})
-					//if err != nil {
-					//	return sum, err
-					//}
-				}
-				//logs.Infof("action:%s, collection:%s, id:%v, data:%v",
-				//row.Action, collection.Name(), resp.Id, resp.Table)
+				query := rdbmsOpt.GetInsert(resp)
+				s.Exec(query)
 			}
 		} else {
 			kvm := rowMap(row, rule, false)
 			id := primaryKey(row, rule)
 			kvm["_id"] = id
+			resp := new(model.RdbmsRespond)
+			resp.Schema = rule.Schema
+			resp.TableName = rule.Table
+			resp.Id = id
+			resp.Action = row.Action
+			resp.Table = kvm
+			query := rdbmsOpt.GetInsert(resp)
+			s.Exec(query)
 
-			//collection := s.collection(s.collectionKey(rule.MongodbDatabase, rule.MongodbCollection))
-
-			switch row.Action {
-			case canal.InsertAction:
-				//_, err := collection.InsertOne(context.Background(), kvm)
-				//if err != nil {
-				//	if s.isDuplicateKeyError(err.Error()) {
-				//		logs.Warnf("duplicate key [ %v ]", stringutil.ToJsonString(kvm))
-				//	} else {
-				//		return sum, err
-				//	}
-				//}
-			case canal.UpdateAction:
-				//_, err := collection.UpdateOne(context.Background(), bson.M{"_id": id}, bson.M{"$set": kvm})
-				//if err != nil {
-				//	return sum, err
-				//}
-			case canal.DeleteAction:
-				//_, err := collection.DeleteOne(context.Background(), bson.M{"_id": id})
-				//if err != nil {
-				//	return sum, err
-				//}
-			}
-
-			//logs.Infof("action:%s, collection:%s, id:%v, data:%v", row.Action, collection.Name(), id, kvm)
 		}
-		sum++
 	}
-	return sum, nil
+
+	if !expect {
+		return 0
+	}
+	return int64(len(rows))
 }
 
 func (s *MysqlEndpoint) Exec(params helpers.Query) bool {

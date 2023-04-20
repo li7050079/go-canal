@@ -1,6 +1,7 @@
 package rdbmsopt
 
 import (
+	"github.com/siddontang/go-mysql/replication"
 	"go-canel/global"
 	"go-canel/model"
 	"go-canel/service/endpoint/rdbms/helpers"
@@ -27,5 +28,10 @@ func NewRdbmsOpt() RdbmsOpt {
 	} else if cfg.IsClickhouse() {
 		return newClickhouseOpt()
 	}
+	return nil
+}
+
+func GetCreateTable(repl *replication.QueryEvent) error {
+
 	return nil
 }

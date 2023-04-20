@@ -62,6 +62,7 @@ func (s *handler) OnTableChanged(schema, table string) error {
 	if global.CacheInsExist(global.CacheKey(schema, table)) {
 		storage.RefreshCacheStorage(global.CacheKey(schema, table))
 	}
+	println("OnTableChanged:" + schema + "." + table)
 	return nil
 }
 
@@ -73,7 +74,7 @@ func (s *handler) OnDDL(nextPos mysql.Position, replication *replication.QueryEv
 	//v.Query = replication.Query
 
 	s.queue <- requests
-	println(string(replication.Query))
+	println("OnDDL:" + string(replication.Query))
 	return nil
 }
 

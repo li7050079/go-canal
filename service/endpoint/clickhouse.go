@@ -36,14 +36,6 @@ import (
 	"reflect"
 )
 
-const (
-	Type      = "clickhouse"
-	Insert    = `INSERT INTO %s.%s(%s) VALUES(%s);`
-	Update    = `ALTER TABLE %s.%s UPDATE %s WHERE %s=?;`
-	Delete    = `ALTER TABLE %s.%s DELETE WHERE %s=?;`
-	DeleteAll = `ALTER TABLE %s.%s DELETE WHERE 1;`
-)
-
 type ClickhouseEndpoint struct {
 	conn *sqlx.DB
 }
@@ -137,80 +129,49 @@ func (s *ClickhouseEndpoint) Consume(from mysql.Position, rows []*model.RowReque
 }
 
 func (s *ClickhouseEndpoint) Stock(rows []*model.RowRequest) int64 {
-	//expect := true
-	//models := make(map[cKey][]mongo.WriteModel, 0)
-	//for _, row := range rows {
-	//	rule, _ := global.RuleIns(row.RuleKey)
-	//	if rule.TableColumnSize != len(row.Row) {
-	//		logs.Warnf("%s schema mismatching", row.RuleKey)
-	//		continue
-	//	}
-	//
-	//	if rule.LuaEnable() {
-	//		kvm := rowMap(row, rule, true)
-	//		ls, err := luaengine.DoMongoOps(kvm, row.Action, rule)
-	//		if err != nil {
-	//			log.Println("Lua 脚本执行失败!!! ,详情请参见日志")
-	//			logs.Errorf("lua 脚本执行失败 : %s ", errors.ErrorStack(err))
-	//			expect = false
-	//			break
-	//		}
-	//
-	//		for _, resp := range ls {
-	//			ccKey := s.collectionKey(rule.MongodbDatabase, resp.Collection)
-	//			model := mongo.NewInsertOneModel().SetDocument(resp.Table)
-	//			array, ok := models[ccKey]
-	//			if !ok {
-	//				array = make([]mongo.WriteModel, 0)
-	//			}
-	//			array = append(array, model)
-	//			models[ccKey] = array
-	//		}
-	//	} else {
-	//		kvm := rowMap(row, rule, false)
-	//		id := primaryKey(row, rule)
-	//		kvm["_id"] = id
-	//
-	//		ccKey := s.collectionKey(rule.MongodbDatabase, rule.MongodbCollection)
-	//		model := mongo.NewInsertOneModel().SetDocument(kvm)
-	//		array, ok := models[ccKey]
-	//		if !ok {
-	//			array = make([]mongo.WriteModel, 0)
-	//		}
-	//		array = append(array, model)
-	//		models[ccKey] = array
-	//	}
-	//}
-	//
-	//if !expect {
-	//	return 0
-	//}
-	//
-	//var slowly bool
-	var sum int64
-	//for key, vs := range models {
-	//	collection := s.collection(key)
-	//	rr, err := collection.BulkWrite(context.Background(), vs)
-	//	if err != nil {
-	//		if s.isDuplicateKeyError(err.Error()) {
-	//			slowly = true
-	//		}
-	//		logs.Error(errors.ErrorStack(err))
-	//		break
-	//	}
-	//	sum += rr.InsertedCount
-	//}
-	//
-	//if slowly {
-	//	logs.Info("do consume slowly ... ... ")
-	//	slowlySum, err := s.doConsumeSlowly(rows)
-	//	if err != nil {
-	//		logs.Warnf(err.Error())
-	//	}
-	//	return slowlySum
-	//}
+	expect := true
+	rdbmsOpt := rdbmsopt.NewRdbmsOpt()
+	for _, row := range rows {
+		rule, _ := global.RuleIns(row.RuleKey)
+		if rule.TableColumnSize != len(row.Row) {
+			logs.Warnf("%s schema mismatching", row.RuleKey)
+			continue
+		}
 
-	return sum
+		if rule.LuaEnable() {
+			kvm := rowMap(row, rule, true)
+			ls, err := luaengine.DoRdbmsOps(kvm, row.Action, rule)
+			if err != nil {
+				log.Errorf("Lua 脚本执行失败!!! ,详情请参见日志")
+				logs.Errorf("lua 脚本执行失败 : %s ", errors.ErrorStack(err))
+				expect = false
+				break
+			}
+
+			for _, resp := range ls {
+				query := rdbmsOpt.GetInsert(resp)
+				s.Exec(query)
+			}
+		} else {
+			kvm := rowMap(row, rule, false)
+			id := primaryKey(row, rule)
+			kvm["_id"] = id
+			resp := new(model.RdbmsRespond)
+			resp.Schema = rule.Schema
+			resp.TableName = rule.Table
+			resp.Id = id
+			resp.Action = row.Action
+			resp.Table = kvm
+			query := rdbmsOpt.GetInsert(resp)
+			s.Exec(query)
+
+		}
+	}
+
+	if !expect {
+		return 0
+	}
+	return int64(len(rows))
 }
 
 func (s *ClickhouseEndpoint) Exec(params helpers.Query) bool {

@@ -21,6 +21,7 @@ func newMysqlOpt() *MysqlOpt {
 	r := &MysqlOpt{}
 	return r
 }
+
 func (model *MysqlOpt) GetInsert(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var fieldNames []string
