@@ -75,6 +75,9 @@ func (s *MysqlEndpoint) Consume(from mysql.Position, rows []*model.RowRequest) e
 			}
 			for _, resp := range ls {
 				rdbmsOpt := rdbmsopt.NewRdbmsOpt()
+				resp.Schema = rule.Schema
+				resp.IdName = primaryKeyName(rule)
+				resp.OldId = primaryOldKey(row, rule)
 				var query helpers.Query
 				switch resp.Action {
 				case canal.InsertAction:
@@ -101,8 +104,8 @@ func (s *MysqlEndpoint) Consume(from mysql.Position, rows []*model.RowRequest) e
 			resp.Id = id
 			resp.Action = row.Action
 			resp.Table = kvm
-			//index := rule.TableInfo.PKColumns[0]
-			//resp.RuleKey = rule.TableInfo.Columns[index].Name
+			resp.IdName = primaryKeyName(rule)
+			resp.OldId = primaryOldKey(row, rule)
 			switch row.Action {
 			case canal.InsertAction:
 				query = rdbmsOpt.GetInsert(resp)
@@ -142,17 +145,18 @@ func (s *MysqlEndpoint) Stock(rows []*model.RowRequest) int64 {
 			}
 
 			for _, resp := range ls {
+				resp.Schema = rule.Schema
 				query := rdbmsOpt.GetInsert(resp)
 				s.Exec(query)
 			}
 		} else {
 			kvm := rowMap(row, rule, false)
 			id := primaryKey(row, rule)
-			kvm["_id"] = id
 			resp := new(model.RdbmsRespond)
 			resp.Schema = rule.Schema
 			resp.TableName = rule.Table
 			resp.Id = id
+			resp.IdName = primaryKeyName(rule)
 			resp.Action = row.Action
 			resp.Table = kvm
 			query := rdbmsOpt.GetInsert(resp)
@@ -175,7 +179,7 @@ func (s *MysqlEndpoint) Exec(params helpers.Query) bool {
 	_, err := s.conn.Execute(fmt.Sprintf("%v", params.Query), MakeSlice(params.Params)...)
 
 	if err != nil {
-		log.Warnf(constants.ErrorExecQuery, "clickhouse", err)
+		log.Warnf(constants.ErrorExecQuery, "mysql", err)
 		return false
 	}
 

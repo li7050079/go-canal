@@ -62,6 +62,8 @@ type RdbmsRespond struct {
 	TableName string
 	Action    string
 	Id        interface{}
+	OldId     interface{}
+	IdName    string
 	Table     map[string]interface{}
 }
 

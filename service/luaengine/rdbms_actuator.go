@@ -29,7 +29,7 @@ import (
 
 func rdbmsModule(L *lua.LState) int {
 	t := L.NewTable()
-	L.SetFuncs(t, _mongoModuleApi)
+	L.SetFuncs(t, _rdbmsModuleApi)
 	L.Push(t)
 	return 1
 }
@@ -45,11 +45,11 @@ var _rdbmsModuleApi = map[string]lua.LGFunction{
 }
 
 func rdbmsInsert(L *lua.LState) int {
-	collection := L.CheckAny(1)
+	tableName := L.CheckAny(1)
 	table := L.CheckAny(2)
 
 	data := L.NewTable()
-	L.SetTable(data, lua.LString("collection"), collection)
+	L.SetTable(data, lua.LString("tableName"), tableName)
 	L.SetTable(data, lua.LString("action"), lua.LString(canal.InsertAction))
 	L.SetTable(data, lua.LString("table"), table)
 
@@ -59,12 +59,12 @@ func rdbmsInsert(L *lua.LState) int {
 }
 
 func rdbmsUpdate(L *lua.LState) int {
-	collection := L.CheckAny(1)
+	tableName := L.CheckAny(1)
 	id := L.CheckAny(2)
 	table := L.CheckAny(3)
 
 	data := L.NewTable()
-	L.SetTable(data, lua.LString("collection"), collection)
+	L.SetTable(data, lua.LString("tableName"), tableName)
 	L.SetTable(data, lua.LString("action"), lua.LString(canal.UpdateAction))
 	L.SetTable(data, lua.LString("id"), id)
 	L.SetTable(data, lua.LString("table"), table)
@@ -75,12 +75,12 @@ func rdbmsUpdate(L *lua.LState) int {
 }
 
 func rdbmsUpsert(L *lua.LState) int {
-	collection := L.CheckAny(1)
+	tableName := L.CheckAny(1)
 	id := L.CheckAny(2)
 	table := L.CheckAny(3)
 
 	data := L.NewTable()
-	L.SetTable(data, lua.LString("collection"), collection)
+	L.SetTable(data, lua.LString("tableName"), tableName)
 	L.SetTable(data, lua.LString("action"), lua.LString(global.UpsertAction))
 	L.SetTable(data, lua.LString("id"), id)
 	L.SetTable(data, lua.LString("table"), table)
@@ -91,11 +91,11 @@ func rdbmsUpsert(L *lua.LState) int {
 }
 
 func rdbmsDelete(L *lua.LState) int {
-	collection := L.CheckAny(1)
+	tableName := L.CheckAny(1)
 	id := L.CheckAny(2)
 
 	data := L.NewTable()
-	L.SetTable(data, lua.LString("collection"), collection)
+	L.SetTable(data, lua.LString("tableName"), tableName)
 	L.SetTable(data, lua.LString("action"), lua.LString(canal.DeleteAction))
 	L.SetTable(data, lua.LString("id"), id)
 
@@ -126,7 +126,7 @@ func DoRdbmsOps(input map[string]interface{}, action string, rule *global.Rule) 
 	responds := make([]*model.RdbmsRespond, 0, ret.Len())
 	ret.ForEach(func(k lua.LValue, v lua.LValue) {
 		resp := new(model.RdbmsRespond)
-		resp.Schema = lvToString(L.GetTable(v, lua.LString("schema")))
+		resp.TableName = lvToString(L.GetTable(v, lua.LString("tableName")))
 		resp.Action = lvToString(L.GetTable(v, lua.LString("action")))
 		resp.Id = lvToInterface(L.GetTable(v, lua.LString("id")), true)
 		lvTable := L.GetTable(v, lua.LString("table"))
@@ -138,16 +138,6 @@ func DoRdbmsOps(input map[string]interface{}, action string, rule *global.Rule) 
 				return
 			}
 			resp.Table = table
-		}
-
-		if action == canal.InsertAction {
-			_id, ok := table["_id"]
-			if !ok {
-				resp.Id = stringutil.UUID()
-				table["_id"] = resp.Id
-			} else {
-				resp.Id = _id
-			}
 		}
 
 		responds = append(responds, resp)

@@ -46,15 +46,15 @@ func (model *ClickhouseOpt) GetUpdate(resq *model.RdbmsRespond) helpers.Query {
 	var fields []string
 
 	for key, value := range resq.Table {
-		if resq.RuleKey != key {
+		if resq.IdName != key {
 			fields = append(fields, "`"+key+"`"+"=?")
 			params = append(params, value)
 		}
 	}
 	// add key to params
-	params = append(params, resq.RuleKey)
+	params = append(params, resq.IdName)
 
-	query := fmt.Sprintf(ClickhouseUpdate, resq.Schema, resq.TableName, strings.Join(fields, ", "), resq.RuleKey)
+	query := fmt.Sprintf(ClickhouseUpdate, resq.Schema, resq.TableName, strings.Join(fields, ", "), resq.IdName)
 
 	return helpers.Query{
 		Query:  query,
@@ -65,8 +65,8 @@ func (model *ClickhouseOpt) GetUpdate(resq *model.RdbmsRespond) helpers.Query {
 func (model *ClickhouseOpt) GetDelete(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var query string
-	query = fmt.Sprintf(ClickhouseDelete, resq.Schema, resq.TableName, resq.RuleKey)
-	params = append(params, resq.RuleKey)
+	query = fmt.Sprintf(ClickhouseDelete, resq.Schema, resq.TableName, resq.IdName)
+	params = append(params, resq.IdName)
 	return helpers.Query{
 		Query:  query,
 		Params: params,

@@ -282,17 +282,22 @@ func rowMap(req *model.RowRequest, rule *global.Rule, primitive bool) map[string
 			val := convertColumnData(req.Row[v.ColumnIndex], v.ColumnMetadata, rule)
 			cacheKey := strings.Split(k, ":")
 			res := storage.Get(cacheKey[0], cacheKey[1], mysqlopt.InterfaceToString(val))
-			if v.WrapName != "" && res[v.WrapName] != nil {
+			if v.WrapName != "" && len(res) > 0 && res[v.WrapName] != nil {
 				if primitive {
 					kv[key] = res[v.WrapName]
 				} else {
 					kv[rule.WrapName(key)] = res[v.WrapName]
 				}
 			} else {
+				//if primitive {
+				//	kv[key] = res
+				//} else {
+				//	kv[rule.WrapName(key)] = res
+				//}
 				if primitive {
-					kv[key] = res
+					kv[key] = nil
 				} else {
-					kv[rule.WrapName(key)] = res
+					kv[rule.WrapName(key)] = nil
 				}
 			}
 
@@ -349,6 +354,39 @@ func primaryKey(re *model.RowRequest, rule *global.Rule) interface{} {
 	column := rule.TableInfo.Columns[index]
 
 	return convertColumnData(data, &column, rule)
+}
+func primaryOldKey(re *model.RowRequest, rule *global.Rule) interface{} {
+	if re.Old == nil {
+		return nil
+	}
+	if rule.IsCompositeKey {
+		vList := make([]string, 0)
+		for _, index := range rule.TableInfo.PKColumns {
+			vList = append(vList, stringutil.ToString(re.Old[index]))
+		}
+		return strings.Join(vList, "@@")
+	}
+
+	index := rule.TableInfo.PKColumns[0]
+	data := re.Old[index]
+	column := rule.TableInfo.Columns[index]
+
+	return convertColumnData(data, &column, rule)
+}
+
+func primaryKeyName(rule *global.Rule) string {
+	if rule.IsCompositeKey {
+		vList := make([]string, 0)
+		for _, index := range rule.TableInfo.PKColumns {
+			vList = append(vList, rule.PaddingMap[rule.TableInfo.Columns[index].Name].WrapName)
+		}
+		return strings.Join(vList, "@@")
+	}
+
+	index := rule.TableInfo.PKColumns[0]
+	column := rule.TableInfo.Columns[index]
+
+	return rule.PaddingMap[column.Name].WrapName
 }
 
 func elsHosts(addr string) []string {

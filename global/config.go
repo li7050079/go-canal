@@ -204,12 +204,16 @@ func initConfig(fileName string) error {
 		if err := checkElsConfig(&c); err != nil {
 			return errors.Trace(err)
 		}
-	case _targetScript:
-
 	case _targetMysql:
 		if err := checkMysqlConfig(&c); err != nil {
 			return errors.Trace(err)
 		}
+	case _targetClickhouse:
+		if err := checkClickhouseConfig(&c); err != nil {
+			return errors.Trace(err)
+		}
+	case _targetScript:
+
 	default:
 		return errors.Errorf("unsupported target: %s", c.Target)
 	}
@@ -371,7 +375,6 @@ func checkMongodbConfig(c *Config) error {
 	if len(c.MongodbAddr) == 0 {
 		return errors.Errorf("empty mongodb_addrs not allowed")
 	}
-
 	return nil
 }
 
@@ -379,7 +382,6 @@ func checkRabbitmqConfig(c *Config) error {
 	if len(c.RabbitmqAddr) == 0 {
 		return errors.Errorf("empty rabbitmq_addr not allowed")
 	}
-
 	c.isReserveRawData = true
 	c.isMQ = true
 	return nil
@@ -389,7 +391,6 @@ func checkKafkaConfig(c *Config) error {
 	if len(c.KafkaAddr) == 0 {
 		return errors.Errorf("empty kafka_addrs not allowed")
 	}
-
 	c.isReserveRawData = true
 	c.isMQ = true
 	return nil
@@ -419,6 +420,14 @@ func checkMysqlConfig(c *Config) error {
 	if len(c.MysqlAddr) == 0 {
 		errors.Errorf("empty mysql_addr not allowed")
 	}
+	c.isReserveRawData = true
+	return nil
+}
+func checkClickhouseConfig(c *Config) error {
+	if len(c.MysqlAddr) == 0 {
+		errors.Errorf("empty mysql_addr not allowed")
+	}
+	c.isReserveRawData = true
 	return nil
 }
 

@@ -84,6 +84,7 @@ func (p *luaStatePool) New() *lua.LState {
 	L.PreloadModule("mqOps", mqModule)
 	L.PreloadModule("mongodbOps", mongoModule)
 	L.PreloadModule("esOps", esModule)
+	L.PreloadModule("rdbmsOps", rdbmsModule)
 
 	return L
 }

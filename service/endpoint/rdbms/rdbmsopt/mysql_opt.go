@@ -9,8 +9,8 @@ import (
 
 const (
 	MysqlInsert    = `INSERT INTO %s.%s(%s) VALUES(%s);`
-	MysqlUpdate    = `UPDATE %s.%s SET %s WHERE %s=?;`
-	MysqlDelete    = `DELETE FROM %s.%s WHERE %s=?;`
+	MysqlUpdate    = `UPDATE %s.%s SET %s WHERE %s;`
+	MysqlDelete    = `DELETE FROM %s.%s WHERE %s;`
 	MysqlDeleteAll = `DELETE FROM %s.%s WHERE 1=1;`
 )
 
@@ -45,17 +45,25 @@ func (model *MysqlOpt) GetInsert(resq *model.RdbmsRespond) helpers.Query {
 func (model *MysqlOpt) GetUpdate(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var fields []string
-
+	var where []string
 	for key, value := range resq.Table {
-		if resq.RuleKey != key {
-			fields = append(fields, "`"+key+"`"+"=?")
-			params = append(params, value)
-		}
+		fields = append(fields, "`"+key+"`"+"=?")
+		params = append(params, value)
 	}
 	// add key to params
-	params = append(params, resq.RuleKey)
+	if oldId, ok := resq.OldId.(string); ok == true {
+		keys := strings.Split(resq.IdName, "@@")
+		values := strings.Split(oldId, "@@")
+		for index := range keys {
+			where = append(where, "`"+keys[index]+"`=?")
+			params = append(params, values[index])
+		}
+	} else {
+		where = append(where, "`"+resq.IdName+"`=?")
+		params = append(params, resq.OldId)
+	}
 
-	query := fmt.Sprintf(MysqlUpdate, resq.Schema, resq.TableName, strings.Join(fields, ", "), resq.RuleKey)
+	query := fmt.Sprintf(MysqlUpdate, resq.Schema, resq.TableName, strings.Join(fields, ", "), strings.Join(where, " and "))
 
 	return helpers.Query{
 		Query:  query,
@@ -66,8 +74,21 @@ func (model *MysqlOpt) GetUpdate(resq *model.RdbmsRespond) helpers.Query {
 func (model *MysqlOpt) GetDelete(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var query string
-	query = fmt.Sprintf(MysqlDelete, resq.Schema, resq.TableName, resq.RuleKey)
-	params = append(params, resq.RuleKey)
+	// add key to params
+	var where []string
+	if id, ok := resq.Id.(string); ok == true {
+		keys := strings.Split(resq.IdName, "@@")
+		values := strings.Split(id, "@@")
+		for index := range keys {
+			where = append(where, "`"+keys[index]+"`=?")
+			params = append(params, values[index])
+		}
+	} else {
+		where = append(where, "`"+resq.IdName+"`=?")
+		params = append(params, resq.Id)
+	}
+	query = fmt.Sprintf(MysqlDelete, resq.Schema, resq.TableName, strings.Join(where, " and "))
+
 	return helpers.Query{
 		Query:  query,
 		Params: params,
