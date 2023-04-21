@@ -6,6 +6,9 @@ charset : utf8
 slave_id: 1001 #slave ID
 flavor: mysql #mysql or mariadb,默认mysql
 
+init_binlog_file: mysql-bin.000001 #起始binlog文件名 默认mysql-bin.000001
+init_position: 0 #起始binlog日志位置 默认0
+#init_stock: true #启动时是否进行全量导入默认false
 #系统相关配置
 #data_dir: D:\\transfer #应用产生的数据存放地址，包括日志、缓存数据等，默认当前运行目录下store文件夹
 #logger:
