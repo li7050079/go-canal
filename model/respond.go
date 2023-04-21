@@ -58,13 +58,13 @@ type MongoRespond struct {
 
 type RdbmsRespond struct {
 	RuleKey   string
-	Schema    string
-	TableName string
+	Schema    string //库名
+	TableName string //同步后的表名
 	Action    string
-	Id        interface{}
-	OldId     interface{}
-	IdName    string
-	Table     map[string]interface{}
+	Id        interface{}            //主键值
+	OldId     interface{}            //原主键值
+	IdName    string                 //！同步后！的主键名称
+	Table     map[string]interface{} //数据
 }
 
 type RedisRespond struct {

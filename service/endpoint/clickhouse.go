@@ -19,12 +19,11 @@ package endpoint
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"github.com/juju/errors"
-	_ "github.com/kshvakov/clickhouse"
-	"github.com/siddontang/go-log/log"
 	"github.com/siddontang/go-mysql/canal"
+	"github.com/siddontang/go-mysql/client"
 	"github.com/siddontang/go-mysql/mysql"
+	"github.com/siddontang/go/log"
 	"go-canel/global"
 	"go-canel/metrics"
 	"go-canel/model"
@@ -33,24 +32,19 @@ import (
 	"go-canel/service/endpoint/rdbms/rdbmsopt"
 	"go-canel/service/luaengine"
 	"go-canel/util/logs"
-	"reflect"
 )
 
 type ClickhouseEndpoint struct {
-	conn *sqlx.DB
+	conn *client.Conn
 }
-
-const DSN = "tcp://%s?username=%s&password=%s&database=%s&read_timeout=10&write_timeout=20"
 
 func newClickhouseEndpoint() *ClickhouseEndpoint {
+
 	r := &ClickhouseEndpoint{}
-	myconn, _ := sqlx.Open("clickhouse", buildDSN())
+	cfg := global.Cfg()
+	myconn, _ := client.Connect(cfg.ClickhouseAddr, cfg.ClickhouseUsername, cfg.ClickhousePassword, cfg.ClickhouseDatabase)
 	r.conn = myconn
 	return r
-}
-func buildDSN() string {
-	cred := global.Cfg()
-	return fmt.Sprintf(DSN, cred.ClickhouseAddr, cred.ClickhouseUsername, cred.ClickhousePassword, cred.ClickhouseDatabase)
 }
 
 func (s *ClickhouseEndpoint) Connect() error {
@@ -81,6 +75,9 @@ func (s *ClickhouseEndpoint) Consume(from mysql.Position, rows []*model.RowReque
 			}
 			for _, resp := range ls {
 				rdbmsOpt := rdbmsopt.NewRdbmsOpt()
+				resp.Schema = rule.Schema
+				resp.IdName = primaryKeyName(rule)
+				resp.OldId = primaryOldKey(row, rule)
 				var query helpers.Query
 				switch resp.Action {
 				case canal.InsertAction:
@@ -99,7 +96,6 @@ func (s *ClickhouseEndpoint) Consume(from mysql.Position, rows []*model.RowReque
 		} else {
 			kvm := rowMap(row, rule, false)
 			id := primaryKey(row, rule)
-			kvm["_id"] = id
 			rdbmsOpt := rdbmsopt.NewRdbmsOpt()
 			var query helpers.Query
 			resp := new(model.RdbmsRespond)
@@ -108,8 +104,8 @@ func (s *ClickhouseEndpoint) Consume(from mysql.Position, rows []*model.RowReque
 			resp.Id = id
 			resp.Action = row.Action
 			resp.Table = kvm
-			index := rule.TableInfo.PKColumns[0]
-			resp.RuleKey = rule.TableInfo.Columns[index].Name
+			resp.IdName = primaryKeyName(rule)
+			resp.OldId = primaryOldKey(row, rule)
 			switch row.Action {
 			case canal.InsertAction:
 				query = rdbmsOpt.GetInsert(resp)
@@ -149,17 +145,18 @@ func (s *ClickhouseEndpoint) Stock(rows []*model.RowRequest) int64 {
 			}
 
 			for _, resp := range ls {
+				resp.Schema = rule.Schema
 				query := rdbmsOpt.GetInsert(resp)
 				s.Exec(query)
 			}
 		} else {
 			kvm := rowMap(row, rule, false)
 			id := primaryKey(row, rule)
-			kvm["_id"] = id
 			resp := new(model.RdbmsRespond)
 			resp.Schema = rule.Schema
 			resp.TableName = rule.Table
 			resp.Id = id
+			resp.IdName = primaryKeyName(rule)
 			resp.Action = row.Action
 			resp.Table = kvm
 			query := rdbmsOpt.GetInsert(resp)
@@ -178,8 +175,8 @@ func (s *ClickhouseEndpoint) Exec(params helpers.Query) bool {
 	if params.Query == "" {
 		return true
 	}
-	tx, _ := s.conn.Begin()
-	_, err := tx.Exec(fmt.Sprintf("%v", params.Query), MakeSlice(params.Params)...)
+	s.conn.Begin()
+	_, err := s.conn.Execute(fmt.Sprintf("%v", params.Query), MakeSlice(params.Params)...)
 
 	if err != nil {
 		log.Warnf(constants.ErrorExecQuery, "clickhouse", err)
@@ -187,25 +184,10 @@ func (s *ClickhouseEndpoint) Exec(params helpers.Query) bool {
 	}
 
 	defer func() {
-		err = tx.Commit()
+		err = s.conn.Commit()
 	}()
 
 	return true
-}
-
-func MakeSlice(input interface{}) []interface{} {
-	s := reflect.ValueOf(input)
-	if s.Kind() != reflect.Slice {
-		log.Warnf("sss")
-	}
-
-	ret := make([]interface{}, s.Len())
-
-	for i := 0; i < s.Len(); i++ {
-		ret[i] = s.Index(i).Interface()
-	}
-
-	return ret
 }
 
 func (s *ClickhouseEndpoint) Close() {

@@ -19,8 +19,10 @@ package endpoint
 
 import (
 	"bytes"
+	"github.com/siddontang/go/log"
 	"go-canel/service/mysqlopt"
 	"go-canel/storage"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -465,4 +467,19 @@ func buildPropertiesByMappings(rule *global.Rule) map[string]interface{} {
 		properties[mapping.Field] = property
 	}
 	return properties
+}
+
+func MakeSlice(input interface{}) []interface{} {
+	s := reflect.ValueOf(input)
+	if s.Kind() != reflect.Slice {
+		log.Warnf("sss")
+	}
+
+	ret := make([]interface{}, s.Len())
+
+	for i := 0; i < s.Len(); i++ {
+		ret[i] = s.Index(i).Interface()
+	}
+
+	return ret
 }

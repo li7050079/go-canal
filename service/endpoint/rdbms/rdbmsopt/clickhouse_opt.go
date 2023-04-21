@@ -9,8 +9,8 @@ import (
 
 const (
 	ClickhouseInsert    = `INSERT INTO %s.%s(%s) VALUES(%s);`
-	ClickhouseUpdate    = `ALTER TABLE %s.%s UPDATE %s WHERE %s=?;`
-	ClickhouseDelete    = `ALTER TABLE %s.%s DELETE WHERE %s=?;`
+	ClickhouseUpdate    = `ALTER TABLE %s.%s UPDATE %s WHERE %s;`
+	ClickhouseDelete    = `ALTER TABLE %s.%s DELETE WHERE %s;`
 	ClickhouseDeleteAll = `ALTER TABLE %s.%s DELETE WHERE 1;`
 )
 
@@ -21,6 +21,7 @@ func newClickhouseOpt() *ClickhouseOpt {
 	r := &ClickhouseOpt{}
 	return r
 }
+
 func (model *ClickhouseOpt) GetInsert(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var fieldNames []string
@@ -44,17 +45,25 @@ func (model *ClickhouseOpt) GetInsert(resq *model.RdbmsRespond) helpers.Query {
 func (model *ClickhouseOpt) GetUpdate(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var fields []string
-
+	var where []string
 	for key, value := range resq.Table {
-		if resq.IdName != key {
-			fields = append(fields, "`"+key+"`"+"=?")
-			params = append(params, value)
-		}
+		fields = append(fields, "`"+key+"`"+"=?")
+		params = append(params, value)
 	}
 	// add key to params
-	params = append(params, resq.IdName)
+	if oldId, ok := resq.OldId.(string); ok == true {
+		keys := strings.Split(resq.IdName, "@@")
+		values := strings.Split(oldId, "@@")
+		for index := range keys {
+			where = append(where, "`"+keys[index]+"`=?")
+			params = append(params, values[index])
+		}
+	} else {
+		where = append(where, "`"+resq.IdName+"`=?")
+		params = append(params, resq.OldId)
+	}
 
-	query := fmt.Sprintf(ClickhouseUpdate, resq.Schema, resq.TableName, strings.Join(fields, ", "), resq.IdName)
+	query := fmt.Sprintf(ClickhouseUpdate, resq.Schema, resq.TableName, strings.Join(fields, ", "), strings.Join(where, " and "))
 
 	return helpers.Query{
 		Query:  query,
@@ -65,8 +74,21 @@ func (model *ClickhouseOpt) GetUpdate(resq *model.RdbmsRespond) helpers.Query {
 func (model *ClickhouseOpt) GetDelete(resq *model.RdbmsRespond) helpers.Query {
 	var params []interface{}
 	var query string
-	query = fmt.Sprintf(ClickhouseDelete, resq.Schema, resq.TableName, resq.IdName)
-	params = append(params, resq.IdName)
+	// add key to params
+	var where []string
+	if id, ok := resq.Id.(string); ok == true {
+		keys := strings.Split(resq.IdName, "@@")
+		values := strings.Split(id, "@@")
+		for index := range keys {
+			where = append(where, "`"+keys[index]+"`=?")
+			params = append(params, values[index])
+		}
+	} else {
+		where = append(where, "`"+resq.IdName+"`=?")
+		params = append(params, resq.Id)
+	}
+	query = fmt.Sprintf(ClickhouseDelete, resq.Schema, resq.TableName, strings.Join(where, " and "))
+
 	return helpers.Query{
 		Query:  query,
 		Params: params,
