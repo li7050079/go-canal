@@ -75,7 +75,7 @@ func (s *ClickhouseEndpoint) Consume(from mysql.Position, rows []*model.RowReque
 			}
 			for _, resp := range ls {
 				rdbmsOpt := rdbmsopt.NewRdbmsOpt()
-				resp.Schema = rule.Schema
+				resp.Schema = rule.RdbmsSchema
 				resp.IdName = primaryKeyName(rule)
 				resp.OldId = primaryOldKey(row, rule)
 				var query helpers.Query
@@ -99,8 +99,8 @@ func (s *ClickhouseEndpoint) Consume(from mysql.Position, rows []*model.RowReque
 			rdbmsOpt := rdbmsopt.NewRdbmsOpt()
 			var query helpers.Query
 			resp := new(model.RdbmsRespond)
-			resp.Schema = rule.Schema
-			resp.TableName = rule.Table
+			resp.Schema = rule.RdbmsSchema
+			resp.TableName = rule.RdbmsTable
 			resp.Id = id
 			resp.Action = row.Action
 			resp.Table = kvm
@@ -145,7 +145,7 @@ func (s *ClickhouseEndpoint) Stock(rows []*model.RowRequest) int64 {
 			}
 
 			for _, resp := range ls {
-				resp.Schema = rule.Schema
+				resp.Schema = rule.RdbmsSchema
 				query := rdbmsOpt.GetInsert(resp)
 				s.Exec(query)
 			}
@@ -153,8 +153,8 @@ func (s *ClickhouseEndpoint) Stock(rows []*model.RowRequest) int64 {
 			kvm := rowMap(row, rule, false)
 			id := primaryKey(row, rule)
 			resp := new(model.RdbmsRespond)
-			resp.Schema = rule.Schema
-			resp.TableName = rule.Table
+			resp.Schema = rule.RdbmsSchema
+			resp.TableName = rule.RdbmsTable
 			resp.Id = id
 			resp.IdName = primaryKeyName(rule)
 			resp.Action = row.Action

@@ -99,6 +99,10 @@ rule:
     value_encoder: json  #值编码，支持json、kv-commas、v-commas；默认为json
     #value_formatter: '{{.ID}}|{{.USER_NAME}}' # 值格式化表达式，如：{{.ID}}|{{.USER_NAME}},{{.ID}}表示ID字段的值、{{.USER_NAME}}表示USER_NAME字段的值
 
+    #rdbms相关
+    #rdbms_schema: #同步到的数据库名称（默认取schema）
+    #rdbms_table: #同步到的表名称（默认取table）
+
     #redis相关
     redis_structure: string # 数据类型。 支持string、hash、list、set、sortedset类型(与redis的数据类型一致)
     #redis_key_prefix: USER_ #key的前缀

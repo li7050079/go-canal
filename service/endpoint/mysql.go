@@ -75,7 +75,7 @@ func (s *MysqlEndpoint) Consume(from mysql.Position, rows []*model.RowRequest) e
 			}
 			for _, resp := range ls {
 				rdbmsOpt := rdbmsopt.NewRdbmsOpt()
-				resp.Schema = rule.Schema
+				resp.Schema = rule.RdbmsSchema
 				resp.IdName = primaryKeyName(rule)
 				resp.OldId = primaryOldKey(row, rule)
 				var query helpers.Query
@@ -99,8 +99,8 @@ func (s *MysqlEndpoint) Consume(from mysql.Position, rows []*model.RowRequest) e
 			rdbmsOpt := rdbmsopt.NewRdbmsOpt()
 			var query helpers.Query
 			resp := new(model.RdbmsRespond)
-			resp.Schema = rule.Schema
-			resp.TableName = rule.Table
+			resp.Schema = rule.RdbmsSchema
+			resp.TableName = rule.RdbmsTable
 			resp.Id = id
 			resp.Action = row.Action
 			resp.Table = kvm
@@ -145,7 +145,7 @@ func (s *MysqlEndpoint) Stock(rows []*model.RowRequest) int64 {
 			}
 
 			for _, resp := range ls {
-				resp.Schema = rule.Schema
+				resp.Schema = rule.RdbmsSchema
 				query := rdbmsOpt.GetInsert(resp)
 				s.Exec(query)
 			}
@@ -153,8 +153,8 @@ func (s *MysqlEndpoint) Stock(rows []*model.RowRequest) int64 {
 			kvm := rowMap(row, rule, false)
 			id := primaryKey(row, rule)
 			resp := new(model.RdbmsRespond)
-			resp.Schema = rule.Schema
-			resp.TableName = rule.Table
+			resp.Schema = rule.RdbmsSchema
+			resp.TableName = rule.RdbmsTable
 			resp.Id = id
 			resp.IdName = primaryKeyName(rule)
 			resp.Action = row.Action
@@ -179,7 +179,7 @@ func (s *MysqlEndpoint) Exec(params helpers.Query) bool {
 	_, err := s.conn.Execute(fmt.Sprintf("%v", params.Query), MakeSlice(params.Params)...)
 
 	if err != nil {
-		log.Warnf(constants.ErrorExecQuery, "mysql", err)
+		log.Warnf(constants.ErrorExecQuery, "rdbms", err)
 		return false
 	}
 

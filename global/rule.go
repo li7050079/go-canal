@@ -122,6 +122,9 @@ type Rule struct {
 	ElsType    string       `yaml:"es_type"`     //es6.x以后一个Index只能拥有一个Type,可以为空，默认使用_doc; es7.x版本此属性无效
 	EsMappings []*EsMapping `yaml:"es_mappings"` //Elasticsearch mappings映射关系,可以为空，为空时根据数据类型自己推导
 
+	//
+	RdbmsSchema string `yaml:"rdbms_schema"`
+	RdbmsTable  string `yaml:"rdbms_table"`
 	// --------------- no config ----------------
 	TableInfo             *schema.Table
 	TableColumnSize       int
@@ -293,6 +296,12 @@ func (s *Rule) Initialize() error {
 
 	if _config.IsEls() {
 		if err := s.initElsConfig(); err != nil {
+			return err
+		}
+	}
+
+	if _config.IsMysql() || _config.IsClickhouse() {
+		if err := s.initRdbmsConfig(); err != nil {
 			return err
 		}
 	}
@@ -608,7 +617,19 @@ func (s *Rule) initRedisConfig() error {
 
 	return nil
 }
+func (s *Rule) initRdbmsConfig() error {
+	if !s.LuaEnable() {
+		if s.RdbmsSchema == "" {
+			s.RdbmsSchema = s.Schema
+		}
 
+		if s.RdbmsTable == "" {
+			s.RdbmsTable = s.Table
+		}
+	}
+
+	return nil
+}
 func (s *Rule) initRocketConfig() error {
 	if !s.LuaEnable() {
 		if s.RocketmqTopic == "" {
