@@ -87,7 +87,7 @@ go-canal是一款MySQL数据库实时增量同步工具。
 
 **二进制安装包**
 
-直接下载安装包:  [点击下载](https://github.com/li7050079/go-canal/releases)
+直接下载安装包:  [点击下载](https://gitee.com/morningcloud/go-canal/releases/)
 
 **源码编译**
 
