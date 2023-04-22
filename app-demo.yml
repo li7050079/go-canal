@@ -36,7 +36,7 @@ web_admin_port: 8060 #web监控端口,默认8060
 #etcd_password: 123456 #etcd密码
 
 #目标类型
-target: redis # 支持redis、mongodb、elasticsearch、rocketmq、kafka、rabbitmq
+target: redis # 支持redis、mongodb、elasticsearch、rocketmq、kafka、rabbitmq、mysql、clickhouse
 
 #redis连接配置
 redis_addrs: 127.0.0.1:6379 #redis地址，多个用逗号分隔
@@ -70,6 +70,19 @@ redis_addrs: 127.0.0.1:6379 #redis地址，多个用逗号分隔
 
 #rabbitmq连接配置
 #rabbitmq_addr: amqp://guest:guest@127.0.0.1:5672/  #连接字符串,如: amqp://guest:guest@localhost:5672/
+
+
+#mysql连接配置
+#mysql_addrs: 127.0.0.1:3306  #mysql连接地址
+#mysql_username:  #mysql用户名，默认为空
+#mysql_password:  #mysql密码，默认为空
+#mysql_database:  #mysql数据库，默认为空
+
+#clickhouse连接配置
+#clickhouse_addrs: 127.0.0.1:3306  #mysql连接地址
+#clickhouse_username:  #mysql用户名，默认为空
+#clickhouse_password:  #mysql密码，默认为空
+#clickhouse_database:  #mysql数据库，默认为空
 
 #cache:
 #  -

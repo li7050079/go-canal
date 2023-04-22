@@ -1,7 +1,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 # 简介
-go-canal基础架构来源于wj596大神的go-mysql-transfer的v1.0.4 release，在此基础上做了一些本地需要的封装，完善了一些异常处理。
+go-canal基础架构来源于wj596大神的go-mysql-transfer的v1.0.4 release，在此基础上做了一些本地需要的封装，完善了一些异常处理，增加了缓存处理、mysql、clickhouse等数据库的支持。
 
 以下介绍来源于原版介绍：
 
@@ -13,7 +13,7 @@ go-canal是一款MySQL数据库实时增量同步工具。
 
 1、简单，不依赖其它组件，一键部署
 
-2、集成多种接收端，如：Redis、MongoDB、Elasticsearch、RocketMQ、Kafka、RabbitMQ、HTTP API等，无需编写客户端，开箱即用
+2、集成多种接收端，如：Mysql、Clickhouse、Redis、MongoDB、Elasticsearch、RocketMQ、Kafka、RabbitMQ、HTTP API等，无需编写客户端，开箱即用
 
 3、内置丰富的数据解析、消息生成规则、模板语法
 
@@ -95,7 +95,7 @@ go-canal是一款MySQL数据库实时增量同步工具。
 
 2、设置' GO111MODULE=on '
 
-3、拉取源码 ' git clone https://github.com/li7050079/go-canal.git '
+3、拉取源码 ' git clone https://gitee.com/morningcloud/go-canal.git '
 
 4、进入目录，执行 ' go build '编译
 
@@ -125,45 +125,45 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 go-canal 的 slav
 
 # 使用说明
 
-* [高可用集群](https://www.kancloud.cn/wj596/go-canel/2116627)
-* [同步数据到Redis](https://www.kancloud.cn/wj596/go-canel/2064427)
-    * [Redis配置](https://www.kancloud.cn/wj596/go-canel/2111996)
-    * [基于规则同步](https://www.kancloud.cn/wj596/go-canel/2111997)
-    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-canel/2111998)
-* [同步数据到MongoDB](https://www.kancloud.cn/wj596/go-canel/2064428)
-    * [MongoDB配置](https://www.kancloud.cn/wj596/go-canel/2111999)
-    * [基于规则同步](https://www.kancloud.cn/wj596/go-canel/2112000)
-    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-canel/2112001)
-* [同步数据到RocketMQ](https://www.kancloud.cn/wj596/go-canel/2064429)
-    * [RocketMQ配置](https://www.kancloud.cn/wj596/go-canel/2112002)
-    * [基于规则同步](https://www.kancloud.cn/wj596/go-canel/2112003)
-    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-canel/2112004)
-* [同步数据到Kafka](https://www.kancloud.cn/wj596/go-canel/2064430)
-    * [Kafka配置](https://www.kancloud.cn/wj596/go-canel/2112005)
-    * [基于规则同步](https://www.kancloud.cn/wj596/go-canel/2112006)
-    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-canel/2112007)
-* [同步数据到RabbitMQ](https://www.kancloud.cn/wj596/go-canel/2064431)
-    * [RabbitMQ配置](https://www.kancloud.cn/wj596/go-canel/2112008)
-    * [基于规则同步](https://www.kancloud.cn/wj596/go-canel/2112009)
-    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-canel/2112010)
-* [同步数据到Elasticsearch](https://www.kancloud.cn/wj596/go-canel/2064432)
-    * [Elasticsearch配置](https://www.kancloud.cn/wj596/go-canel/2112011)
-    * [基于规则同步](https://www.kancloud.cn/wj596/go-canel/2112012)
-    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-canel/2112013)
-* [全量数据导入](https://www.kancloud.cn/wj596/go-canel/2116628)
-* [Lua脚本](https://www.kancloud.cn/wj596/go-canel/2064433)
-    * [基础模块](https://www.kancloud.cn/wj596/go-canel/2112014)
-    * [Json模块](https://www.kancloud.cn/wj596/go-canel/2112015)
-    * [HttpClient模块](https://www.kancloud.cn/wj596/go-canel/2112016)
-    * [DBClient模块](https://www.kancloud.cn/wj596/go-canel/2112017)
-* [监控](https://www.kancloud.cn/wj596/go-canel/2064434)
-* [性能测试](https://www.kancloud.cn/wj596/go-canel/2116629)
-* [常见问题](https://www.kancloud.cn/wj596/go-canel/2064435)
+* [高可用集群](https://www.kancloud.cn/wj596/go-mysql-transfer/2116627)
+* [同步数据到Redis](https://www.kancloud.cn/wj596/go-mysql-transfer/2064427)
+    * [Redis配置](https://www.kancloud.cn/wj596/go-mysql-transfer/2111996)
+    * [基于规则同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2111997)
+    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2111998)
+* [同步数据到MongoDB](https://www.kancloud.cn/wj596/go-mysql-transfer/2064428)
+    * [MongoDB配置](https://www.kancloud.cn/wj596/go-mysql-transfer/2111999)
+    * [基于规则同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112000)
+    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112001)
+* [同步数据到RocketMQ](https://www.kancloud.cn/wj596/go-mysql-transfer/2064429)
+    * [RocketMQ配置](https://www.kancloud.cn/wj596/go-mysql-transfer/2112002)
+    * [基于规则同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112003)
+    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112004)
+* [同步数据到Kafka](https://www.kancloud.cn/wj596/go-mysql-transfer/2064430)
+    * [Kafka配置](https://www.kancloud.cn/wj596/go-mysql-transfer/2112005)
+    * [基于规则同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112006)
+    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112007)
+* [同步数据到RabbitMQ](https://www.kancloud.cn/wj596/go-mysql-transfer/2064431)
+    * [RabbitMQ配置](https://www.kancloud.cn/wj596/go-mysql-transfer/2112008)
+    * [基于规则同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112009)
+    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112010)
+* [同步数据到Elasticsearch](https://www.kancloud.cn/wj596/go-mysql-transfer/2064432)
+    * [Elasticsearch配置](https://www.kancloud.cn/wj596/go-mysql-transfer/2112011)
+    * [基于规则同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112012)
+    * [基于Lua脚本同步](https://www.kancloud.cn/wj596/go-mysql-transfer/2112013)
+* [全量数据导入](https://www.kancloud.cn/wj596/go-mysql-transfer/2116628)
+* [Lua脚本](https://www.kancloud.cn/wj596/go-mysql-transfer/2064433)
+    * [基础模块](https://www.kancloud.cn/wj596/go-mysql-transfer/2112014)
+    * [Json模块](https://www.kancloud.cn/wj596/go-mysql-transfer/2112015)
+    * [HttpClient模块](https://www.kancloud.cn/wj596/go-mysql-transfer/2112016)
+    * [DBClient模块](https://www.kancloud.cn/wj596/go-mysql-transfer/2112017)
+* [监控](https://www.kancloud.cn/wj596/go-mysql-transfer/2064434)
+* [性能测试](https://www.kancloud.cn/wj596/go-mysql-transfer/2116629)
+* [常见问题](https://www.kancloud.cn/wj596/go-mysql-transfer/2064435)
 
 
 # 感谢
 
-* [go-canel](github.com/wj596/go-canel)
+* [go-mysql-transfer](github.com/wj596/go-mysql-transfer)
 
 * [go-mysql](github.com/siddontang/go-mysql)
 
@@ -178,9 +178,14 @@ server_id=1 # 配置 MySQL replaction 需要定义，不要和 go-canal 的 slav
 
 # 更新日志
 **更新计划**
-* 以修复使用bug为主
+* 后续持续更新同步端适配
+* 解决运行中的bug
 
-**v1.0.0 bate （2021-04-16）**
+**v1.0.5.beta.2 （2022-04-22）**
+
+* 同步端适配mysql、clickhouse；
+
+**v1.0.5.beta.1 （2021-04-16）**
 
 * 添加指定表初始存入本地bolt缓存库功能，并可根据指定key随时读取；
 * 添加binlog运行前自动进行全量同步配置项；
